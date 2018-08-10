@@ -1,0 +1,45 @@
+
+server:
+  port: 20003
+
+eureka:
+  instance:
+    #hostname: localhost
+    ip-address: 103.74.172.116  # 指定此实例的ip
+    prefer-ip-address: true   # 注册时使用ip而不是主机名, docker方式部署需要设置为true
+  client:
+    register-with-eureka: true # 表示是否将自己注册到Eureka Server,默认为true.
+    fetch-registry: true # 表示是否从Eureka Server获取注册信息,默认为true.
+    service-url:
+      # 设置与Eureka Server的地址,查询服务和注册服务都需要依赖这个地址.默认是http://localhost:8761/eureka/;多个地址可使用','风格.
+      default-zone: http://eureka_admin:oyzx2007@103.74.172.116:20001/eureka/,http://eureka_admin:oyzx2007@103.74.172.116:20002/eureka/
+  server:
+    enable-self-preservation: false       # 关闭自我保护模式（缺省为打开）
+    eviction-interval-timer-in-ms: 10000  # 续期时间，即扫描失效服务的间隔时间（缺省为60*1000ms）
+    wait-time-in-ms-when-sync-empty: 0
+
+#  cloud:
+#    config:
+#      uri: ${CONFIG_SERVER_URL:http://localhost:8888}
+
+spring:
+  security:
+    user:
+      name: eureka_admin
+      password: oyzx2007
+
+# spring-boot-actuator模块提供监控端点权限
+spring:
+  management:
+    security:
+      enabled: false
+
+# 日志
+logging:
+  level:
+    org:
+      springframework:
+        security: DEBUG
+  pattern:
+    console : "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %highlight(%-5level) %cyan(%logger{15}) - %msg %n"
+    #console : "%date  %highlight(%-5level) [%12.12thread] %cyan(%-40.40logger{40}) : %msg %n"

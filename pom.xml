@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <parent>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-parent</artifactId>
+    <version>2.0.1.RELEASE</version>
+  </parent>
+
+  <!--
+  https://github.com/sqshq/PiggyMetrics
+  https://github.com/cloudframeworks-springcloud/user-guide-springcloud
+  -->
+
+  <groupId>com.darren.cloud</groupId>
+  <modelVersion>4.0.0</modelVersion>
+  <version>1.0-SNAPSHOT</version>
+  <artifactId>darren-cloud-parent</artifactId>
+  <name>darren-cloud-parent</name>
+  <packaging>pom</packaging>
+  <description>spring cloud parent project</description>
+
+  <modules>
+    <module>dr-basic-eureka-server</module>
+    <module>dr-basic-gateway-server</module>
+    <module>dr-basic-zuul-server</module>
+    <module>dr-basic-common</module>
+    <module>dr-auth-server</module>
+    <module>dr-basic-monitoring-server</module>
+    <module>dr-movie-server</module>
+    <module>dr-user-server</module>
+    <module>dr-order-server</module>
+    <module>dr-scheduling-server</module>
+  </modules>
+
+  <!-- 统一参数配置 -->
+  <properties>
+    <spring-cloud.version>Finchley.RELEASE</spring-cloud.version>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    <java.version>1.8</java.version>
+  </properties>
+
+  <!-- 公共依赖管理 -->
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.springframework.cloud</groupId>
+        <artifactId>spring-cloud-dependencies</artifactId>
+        <version>${spring-cloud.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
+  <!-- 公共库 -->
+  <dependencies>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-web</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-actuator</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-test</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok</artifactId>
+      <optional>true</optional>
+    </dependency>
+  </dependencies>
+
+
+  <!-- maven私仓配置 -->
+  <!--distributionManagement>
+
+    <repository>
+        <id>nexus-releases</id>
+        <url>http://47.98.52.245:7081/repository/maven-releases/</url>
+    </repository>
+    <snapshotRepository>
+        <id>nexus-snapshots</id>
+        <url>http://47.98.52.245:7081/repository/maven-snapshots/</url>
+    </snapshotRepository>
+
+  </distributionManagement-->
+
+  <build>
+    <plugins>
+      <!-- 编译时的 JDK 版本 -->
+      <plugin>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <source>1.8</source>
+          <target>1.8</target>
+        </configuration>
+      </plugin>
+
+      <!-- 生成sources源码包的插件 -->
+      <plugin>
+        <artifactId>maven-source-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>attach-sources</id>
+            <phase>deploy</phase>
+          </execution>
+        </executions>
+      </plugin>
+
+      <!-- 生成javadoc文档包的插件 -->
+      <plugin>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>attach-javadocs</id>
+            <phase>deploy</phase>
+          </execution>
+        </executions>
+      </plugin>
+
+      <!-- 测试运行器, 兼容JUnit 3、JUnit 4以及TestNG -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <configuration>
+          <!-- Maven打包时是否过滤整个测试代码 -->
+          <skipTests>true</skipTests>
+          <includes>
+            <include>**/*Tests.java</include>
+          </includes>
+          <excludes>
+            <exclude>**/*ServiceTest.java</exclude>
+            <exclude>**/TempDaoTest.java</exclude>
+          </excludes>
+        </configuration>
+      </plugin>
+
+      <!-- 本工程忽略docker打包，只需要在server中打 -->
+      <plugin>
+        <groupId>com.spotify</groupId>
+        <artifactId>docker-maven-plugin</artifactId>
+        <version>1.0.0</version>
+        <configuration>
+          <skipDockerBuild>true</skipDockerBuild>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+</project>
