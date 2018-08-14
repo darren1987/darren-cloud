@@ -1,16 +1,16 @@
 # 服务器开放端口
 server:
-  port: 30000
+  port: 20300
   # 压缩,这个属性样板打开了压缩选项，这样稍后应用到JSON正文的压缩就有保证了。
   compression:
     enabled: true
     mime-types: application/json
 
-# 日志级别
-logging.level.org.springframework.security: INFO
 
-# 防止第一次调用失败，设置超时时间为60秒
-hystrix.command.default.execution.isolation.thread.timeoutInMilliseconds: 60000
+# 日志
+logging.level.org.springframework.security: INFO
+logging.file: ./logs/${spring.application.name}.log
+
 
 # -----Spring Cloud eureka-----
 eureka:
@@ -18,14 +18,24 @@ eureka:
     instance-id: ${spring.cloud.client.ip-address}:${spring.application.name}:${server.port}
     prefer-ip-address: true                 # docker方式部署需要设置为true
     lease-renewal-interval-in-seconds: 5  # eureka客户需要多长时间发送心跳给eureka服务器，表明它仍然活着,默认为30 秒
+    health-check-url-path: /actuator/health # 健康检查的地址（依赖spring-boot-starter-actuator）, 2.0后actuator的地址发生了变化
   client:
-    serviceUrl:
-      defaultZone: http://localhost:20000/eureka/
+    registry-fetch-interval-seconds: 5    # 表示eureka client间隔多久去拉取服务注册信息，默认为30秒
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:10100/eureka/
 
-security:
-  oauth2:
-    resource:
-      user-info-uri: http://auth-service:30000/uaa/users/current
+# 防止第一次调用失败，设置超时时间为60秒
+hystrix.command.default.execution.isolation.thread.timeoutInMilliseconds: 60000
+
+# fegin-ribbon配置, 设置超时,重试等参数
+ribbon:
+  ReadTimeout: 20000                # 读取超时20秒
+  ConnectTimeout: 20000             # 链接超时20秒
+  MaxAutoRetries: 2                 # 当前实例重试次数
+  MaxAutoRetriesNextServer: 2      # 下一个实例重试次数
+  OkToRetryOnAllOperations: true   # 对所有操作请求都进行重试
 
 
 # spring-boot-admin 2.0开始，actuator默认不开放，所以要设置为开放
@@ -38,51 +48,15 @@ management:
     health:
       show-details: ALWAYS
 
-logging.file: ./${spring.application.name}.log
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+# 链路跟踪配置 sleuth & zipkin
 spring:
-  # AOP
-  aop:
-    proxy-target-class: true
-    auto: true
-
-eureka:
-  instance:
-    instance-id: ${spring.cloud.client.ip-address}:${spring.application.name}:${server.port}
-    prefer-ip-address: true                 # docker方式部署需要设置为true
-    lease-renewal-interval-in-seconds: 5  # eureka客户需要多长时间发送心跳给eureka服务器，表明它仍然活着,默认为30 秒
-  client:
-    register-with-eureka: true
-    fetch-registry: true
-    service-url:
-      defaultZone: http://192.168.82.64:20000/eureka/
-
-# 防止第一次调用失败，设置超时时间为60秒
-hystrix.command.default.execution.isolation.thread.timeoutInMilliseconds: 60000
-
-ribbon:
-  ReadTimeout: 20000                # 读取超时20秒
-  ConnectTimeout: 20000             # 链接超时20秒
-  MaxAutoRetries: 2                 # 当前实例重试次数
-  MaxAutoRetriesNextServer: 2      # 下一个实例重试次数
-  OkToRetryOnAllOperations: true   # 对所有操作请求都进行重试
+  sleuth:
+    web:
+      client:
+        enabled: true
+    sampler:
+      probability: 1.0                # 将采样比例设置为 1.0，也就是全部都需要。默认是 0.1
+  zipkin:
+    base-url: http://localhost:9411/   # 指定 Zipkin 服务器的地址, 默认localhost:9411
+    #sender.type: kafka                 # 数据到第三方配置

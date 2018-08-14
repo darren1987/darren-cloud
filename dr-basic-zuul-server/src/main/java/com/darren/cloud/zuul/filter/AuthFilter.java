@@ -47,6 +47,7 @@ public class AuthFilter extends ZuulFilter {
 
     @Override
     public String filterType() {
+        //定义filter的类型，有pre、route、post、error四种
         // 前置过滤器
         return FilterConstants.PRE_TYPE;
     }
@@ -59,6 +60,7 @@ public class AuthFilter extends ZuulFilter {
 
     @Override
     public boolean shouldFilter() {
+        //表示是否需要执行该filter，true表示执行，false表示不执行
         RequestContext ctx = RequestContext.getCurrentContext();
         HttpServletRequest request = ctx.getRequest();
         String uri = request.getRequestURI();

@@ -2,4 +2,4 @@ spring:
   profiles:
     active: dev
   application:
-    name: dr-basic-gateway-servewr
+    name: dr-basic-gateway-server

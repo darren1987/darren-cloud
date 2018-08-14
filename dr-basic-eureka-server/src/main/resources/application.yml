@@ -2,4 +2,4 @@ spring:
   profiles:
     active: dev
   application:
-    name: dr-basic-eureka-servewr
+    name: dr-basic-eureka-server

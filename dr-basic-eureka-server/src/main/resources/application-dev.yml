@@ -1,6 +1,10 @@
 
 server:
-  port: 20000
+  port: 10100
+
+# 日志
+logging.level.org.springframework.security: INFO
+logging.file: ./logs/${spring.application.name}.log
 
 eureka:
   instance:
@@ -18,6 +22,7 @@ eureka:
     eviction-interval-timer-in-ms: 10000  # 续期时间，即扫描失效服务的间隔时间（缺省为60*1000ms）
     wait-time-in-ms-when-sync-empty: 0
 
+# 注册中心安全配置
 spring:
   security:
     user:

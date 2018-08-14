@@ -3,4 +3,4 @@
 spring.profiles.active: dev
 
 # 微服务名称
-spring.application.name: dr-auth-server
+spring.application.name: dr-movie-server

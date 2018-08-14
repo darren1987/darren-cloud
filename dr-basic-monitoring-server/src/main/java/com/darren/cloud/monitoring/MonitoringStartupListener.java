@@ -1,4 +1,4 @@
-package com.darren.cloud.auth;
+package com.darren.cloud.monitoring;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
@@ -13,10 +13,10 @@ import org.springframework.stereotype.Component;
  */
 @Slf4j
 @Component
-public class AuthStartupListener implements ApplicationListener<ApplicationReadyEvent> {
+public class MonitoringStartupListener implements ApplicationListener<ApplicationReadyEvent> {
 
     @Override
     public void onApplicationEvent(ApplicationReadyEvent arg) {
-        log.info(">>>>>>>>>>>>>>auth服务启动监听器<<<<<<<<<<<<<");
+        log.info(">>>>>>>>>>>>>>monitoring服务启动监听器<<<<<<<<<<<<<");
     }
 }
