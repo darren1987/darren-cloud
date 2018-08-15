@@ -1,6 +1,7 @@
 
 
 ### dev环境
+```text
                             | ip        | 端口  | 说明 
 ----------------------------|-----------|-------|------------------------------
 dr-basic-zuul-server        | localhost | 10000 | zuul网关对外端口
@@ -13,6 +14,7 @@ dr-scheduling-server        | localhost | 20100 | 定时调度服务对外端口
 dr-movie-server             | localhost | 20200 | 电影服务对外端口
 dr-order-server             | localhost | 20300 | 订单服务对外端口
 dr-user-server              | localhost | 20400 | 用户服务对外端口
+```
 
 ### dev url
 - eureka主页: http://localhost:10100/

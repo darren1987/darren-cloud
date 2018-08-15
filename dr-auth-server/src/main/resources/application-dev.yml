@@ -16,11 +16,12 @@ logging.file: ./logs/${spring.application.name}.log
 eureka:
   instance:
     instance-id: ${spring.cloud.client.ip-address}:${spring.application.name}:${server.port}
-    prefer-ip-address: true                 # docker方式部署需要设置为true
-    lease-renewal-interval-in-seconds: 5  # eureka客户需要多长时间发送心跳给eureka服务器，表明它仍然活着,默认为30 秒
-    health-check-url-path: /actuator/health # 健康检查的地址（依赖spring-boot-starter-actuator）, 2.0后actuator的地址发生了变化
+    prefer-ip-address: true                      # docker方式部署需要设置为true
+    lease-renewal-interval-in-seconds: 5       # eureka客户需要多长时间发送心跳给eureka服务器，表明它仍然活着,默认为30 秒
+    lease-expiration-duration-in-seconds: 30  # 等待下一次心跳的超时时间, 默认90s,必须必lease-renewal-interval-in-seconds大
+    health-check-url-path: /actuator/health     # 健康检查的地址（依赖spring-boot-starter-actuator）, 2.0后actuator的地址发生了变化
   client:
-    registry-fetch-interval-seconds: 5    # 表示eureka client间隔多久去拉取服务注册信息，默认为30秒
+    registry-fetch-interval-seconds: 5        # 表示eureka client间隔多久去拉取服务注册信息，默认为30秒
     register-with-eureka: true
     fetch-registry: true
     service-url:
