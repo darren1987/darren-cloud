@@ -14,32 +14,19 @@ import java.util.Map;
 public interface TransactionDataProvider {
 
     /**
-     * 新增事务
+     * 保存事务与对应事件
      *
      * @param transaction 事务对象
+     * @param eventContainer 事件容器
      */
-    void insertTransaction(TransactionObject transaction);
+    void save(TransactionObject transaction, List<TransactionEventObject> eventContainer);
 
     /**
      * 更新事务
      *
-     * @param transaction 事务
+     * @param transaction 事务对象
      */
     void updateTransaction (TransactionObject transaction);
-
-    /**
-     * 完成事务
-     *
-     * @param transaction 事务
-     */
-    void updateTransactionToFinish (TransactionObject transaction);
-
-    /**
-     * 新增事件
-     *
-     * @param event 事件对象
-     */
-    void insertEvent(TransactionEventObject event);
 
     /**
      * 更新事件

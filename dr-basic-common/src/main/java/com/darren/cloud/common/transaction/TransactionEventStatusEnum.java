@@ -11,10 +11,24 @@ import lombok.Getter;
 @Getter
 public enum TransactionEventStatusEnum {
 
+    /**
+     * 错误的状态值,不存在的状态
+     */
     NOT_EXIST ("NOT_EXIST", "错误的状态值,不存在的状态"),
 
+    /**
+     * 未知
+     */
     UNKNOWN("UNKNOWN", "未知"),
+
+    /**
+     * 执行成功
+     */
     SUCCEED("SUCCEED", "执行成功"),
+
+    /**
+     * 执行失败
+     */
     FAIL("FAIL", "执行失败")
     ;
 

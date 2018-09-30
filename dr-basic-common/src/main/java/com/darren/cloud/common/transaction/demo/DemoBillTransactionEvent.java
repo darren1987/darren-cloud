@@ -1,7 +1,7 @@
 package com.darren.cloud.common.transaction.demo;
 
 import com.darren.cloud.common.transaction.EventResult;
-import com.darren.cloud.common.transaction.TransactionEvent;
+import com.darren.cloud.common.transaction.BaseTransactionEvent;
 import com.darren.cloud.common.transaction.TransactionEventManager;
 import com.darren.cloud.common.transaction.demo.DemoProducerServer.DemoOrder;
 import lombok.Data;
@@ -15,7 +15,7 @@ import lombok.experimental.Accessors;
  */
 @Data
 @Accessors(chain = true)
-public class DemoBillTransactionEvent extends TransactionEvent {
+public class DemoBillTransactionEvent extends BaseTransactionEvent {
 
     private String user;            // 店长
     private DemoOrder sourceOrder;  // 来源订单实体

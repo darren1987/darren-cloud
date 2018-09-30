@@ -30,26 +30,14 @@ public class MemoryTransactionDataProvider implements TransactionDataProvider {
     private Map<String, Set<TransactionEventObject>> transactionEventsMap = new HashMap<>();
 
     @Override
-    public synchronized void insertTransaction(TransactionObject transaction) {
+    public synchronized void save(TransactionObject transaction, List<TransactionEventObject> eventContainer) {
         transactionMap.put(transaction.getUuid(), transaction);
+        transactionEventsMap.put(transaction.getUuid(), new HashSet<>(eventContainer));
     }
 
     @Override
     public synchronized void updateTransaction(TransactionObject transaction) {
         transactionMap.put(transaction.getUuid(), transaction);
-    }
-
-    @Override
-    public synchronized void updateTransactionToFinish(TransactionObject transaction) {
-        transactionMap.remove(transaction.getUuid());
-    }
-
-    @Override
-    public synchronized void insertEvent(TransactionEventObject event) {
-        Set<TransactionEventObject> set = transactionEventsMap
-            .computeIfAbsent(event.getUuid(), k -> new HashSet<>());
-
-        set.add(event);
     }
 
     @Override

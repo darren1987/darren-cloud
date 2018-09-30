@@ -13,6 +13,10 @@
 ### 备注
 - 2PC : Two-phase commit protocol 两阶段提交
 - TCC : Try、Commit、Cancel 
+- Best Efforts 1PC pattern 最大努力1pc模式
+- messaging transaction
+- database transaction
+- Idempotent Business Service pattern : 幕等业务服务模式
 
 ```java
 public class DemoTransaction {
@@ -26,5 +30,7 @@ public class DemoTransaction {
       executor.commit(); 
     }
 }
-
 ```
+
+### TCC方案
+- http://www.bytesoft.org/

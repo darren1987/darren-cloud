@@ -53,16 +53,6 @@ public class TransactionEventObject {
      */
     private String eventJson;
 
-    /**
-     * 创建时间
-     */
-    private Date createTime;
-
-    /**
-     * 更新时间
-     */
-    private Date updateTime;
-
     @Override
     public boolean equals(Object o) {
         if (o == this) {

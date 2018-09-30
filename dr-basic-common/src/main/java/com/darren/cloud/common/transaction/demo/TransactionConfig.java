@@ -1,6 +1,7 @@
 package com.darren.cloud.common.transaction.demo;
 
-import com.darren.cloud.common.transaction.TransactionExecutorFactory;
+import com.darren.cloud.common.transaction.BedtListener;
+import com.darren.cloud.common.transaction.TransactionFactory;
 import com.darren.cloud.common.transaction.data.MemoryTransactionDataProvider;
 import java.util.concurrent.Executors;
 
@@ -15,8 +16,9 @@ public class TransactionConfig {
 
     public static void init (){
 
-        TransactionExecutorFactory.init(
+        TransactionFactory.init(
             new MemoryTransactionDataProvider(),
+            new BedtListener(),
             Executors.newSingleThreadScheduledExecutor(),
             10, 5, 10
         );

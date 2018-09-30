@@ -26,7 +26,7 @@ public class TransactionScanner implements Runnable {
     public void run (){
         Map<TransactionObject, List<TransactionEventObject>> map = transactionDataProvider.findMapOnCommit();
         for (Entry<TransactionObject, List<TransactionEventObject>> entry : map.entrySet()){
-            TransactionExecutor executor = TransactionExecutorFactory.createExecutor(entry.getKey(), entry.getValue());
+            BedtExecutor executor = TransactionFactory.createBedtExecutor(entry.getKey(), entry.getValue());
             executor.executeTransaction();
         }
     }

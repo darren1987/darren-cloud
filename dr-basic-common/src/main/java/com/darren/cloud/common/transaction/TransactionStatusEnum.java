@@ -11,11 +11,29 @@ import lombok.Getter;
 @Getter
 public enum TransactionStatusEnum {
 
+    /**
+     * 错误的状态值,不存在的状态
+     */
     NOT_EXIST ("NOT_EXIST", "错误的状态值,不存在的状态"),
 
+    /**
+     * 启动事务
+     */
     START("START", "启动事务"),
+
+    /**
+     * 提交事务
+     */
     COMMIT("COMMIT", "提交事务"),
+
+    /**
+     * 事务完成
+     */
     FINISH("FINISH", "事务完成"),
+
+    /**
+     * 事务最终执行失败,需人工介入
+     */
     ERROR("ERROR", "事务最终执行失败,需人工介入"),
 
     // ROLLBACK("COMMIT", "回滚事务"),

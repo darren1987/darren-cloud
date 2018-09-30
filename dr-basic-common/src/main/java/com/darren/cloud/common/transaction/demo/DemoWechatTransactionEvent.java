@@ -1,7 +1,7 @@
 package com.darren.cloud.common.transaction.demo;
 
 import com.darren.cloud.common.transaction.EventResult;
-import com.darren.cloud.common.transaction.TransactionEvent;
+import com.darren.cloud.common.transaction.BaseTransactionEvent;
 import com.darren.cloud.common.transaction.TransactionEventManager;
 import lombok.Data;
 import lombok.experimental.Accessors;
@@ -14,7 +14,7 @@ import lombok.experimental.Accessors;
  */
 @Data
 @Accessors(chain = true)
-public class DemoWechatTransactionEvent extends TransactionEvent {
+public class DemoWechatTransactionEvent extends BaseTransactionEvent {
 
     private String user;            // 微信用户
     private String orderName;       // 订单名称

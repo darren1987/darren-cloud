@@ -1,7 +1,7 @@
 package com.darren.cloud.common.transaction.demo;
 
-import com.darren.cloud.common.transaction.TransactionExecutor;
-import com.darren.cloud.common.transaction.TransactionExecutorFactory;
+import com.darren.cloud.common.transaction.BedtExecutor;
+import com.darren.cloud.common.transaction.TransactionFactory;
 import com.darren.cloud.common.utils.JsonUtils;
 import java.math.BigDecimal;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -30,7 +30,7 @@ public class DemoProducerServer {
         DemoOrder order = insertOrder();
         System.out.println("本地保存: 订单. order: " + JsonUtils.toJson(order));
 
-        TransactionExecutor executor = TransactionExecutorFactory.createExecutor("demo1");
+        BedtExecutor executor = TransactionFactory.createBedtExecutor("demo1");
         executor.start();
         executor.sendEvent(DemoBillTransactionEvent.of("店长darren", order));
         executor.sendEvent(DemoWechatTransactionEvent.of("买家小花", order.getName()));

@@ -16,14 +16,14 @@ public final class TransactionEventManager {
     /**
      * 事件class对象容器 map《事件类名, 事件class对象》
      */
-    private final static Map<String, Class<? extends TransactionEvent>> eventClassMap = new HashMap<>();
+    private final static Map<String, Class<? extends BaseTransactionEvent>> eventClassMap = new HashMap<>();
 
     /**
      * 注册事件
      *
      * @param clazz 事件class对象
      */
-    public synchronized static void registerEvent (Class<? extends TransactionEvent> clazz){
+    public synchronized static void registerEvent (Class<? extends BaseTransactionEvent> clazz){
         String simpleName = clazz.getSimpleName();
         if (eventClassMap.containsKey(simpleName)){
             throw new RuntimeException(MessageFormat.format(
@@ -40,9 +40,9 @@ public final class TransactionEventManager {
      * @param event 事件对象
      * @return 事件
      */
-    public static TransactionEvent createEvent (TransactionEventObject event){
+    public static BaseTransactionEvent createEvent (TransactionEventObject event){
         String simpleName = event.getEventType();
-        Class<? extends TransactionEvent> clazz = eventClassMap.get(event.getEventType());
+        Class<? extends BaseTransactionEvent> clazz = eventClassMap.get(event.getEventType());
         if (clazz == null){
             throw new RuntimeException(MessageFormat.format(
                 "register transaction event create error, event[{0}] not exist, all events：{1}",
