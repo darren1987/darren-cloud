@@ -3,39 +3,37 @@ package com.darren.cloud.common.transaction;
 import lombok.Getter;
 
 /**
- * 事务事件状态
+ * 事务类型枚举
  *
  * @author darren.ouyang
- * @version 2018/9/26 16:16
+ * @version 2018/10/22 14:06
  */
 @Getter
-public enum TransactionEventStatusEnum {
+public enum TransactionTypeEnum {
 
     /**
-     * 错误的状态值,不存在的状态
+     * 错误的枚举值,不存在的枚举
      */
-    NOT_EXIST ("NOT_EXIST", "错误的状态值,不存在的状态"),
+    NOT_EXIST ("NOT_EXIST", "错误的枚举值,不存在的枚举"),
 
     /**
-     * 未知
+     * 最大努力通知柔性事务模式
      */
-    UNKNOWN("UNKNOWN", "未知"),
-
+    BEDT("BEDT", "最大努力通知柔性事务(Best Effort Delivery Transaction)"),
     /**
-     * 执行成功
+     * 事务补偿模式
      */
-    SUCCEED("SUCCEED", "执行成功"),
-
+    CTP("CTP", "事务补偿模式(Compensating Transaction pattern)"),
     /**
-     * 执行失败
+     * tcc事务模式
      */
-    FAIL("FAIL", "执行失败")
+    TCC("TCC", "tcc事务(Try-Confirm-Cancel transaction)"),
     ;
 
     private final String code;
     private final String comment;
 
-    TransactionEventStatusEnum (String code, String comment){
+    TransactionTypeEnum(String code, String comment){
         this.code = code;
         this.comment = comment;
     }
@@ -57,8 +55,8 @@ public enum TransactionEventStatusEnum {
      * @param code code
      * @return 举对象
      */
-    public static TransactionEventStatusEnum getEnum(String code){
-        for (TransactionEventStatusEnum enumValue : TransactionEventStatusEnum.values()){
+    public static TransactionTypeEnum getEnum(String code){
+        for (TransactionTypeEnum enumValue : TransactionTypeEnum.values()){
             if (enumValue.equalsCode(code)){
                 return enumValue;
             }

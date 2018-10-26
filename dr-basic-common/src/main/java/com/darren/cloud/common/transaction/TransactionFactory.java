@@ -1,9 +1,9 @@
 package com.darren.cloud.common.transaction;
 
-import com.darren.cloud.common.transaction.data.TransactionDataProvider;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import com.darren.cloud.common.transaction.idempotent.IdempotentExecutor;
+import com.darren.cloud.common.transaction.schema.bedt.BedtExecutor;
+import com.darren.cloud.common.transaction.schema.ctp.CtpExecutor;
+import com.darren.cloud.common.transaction.schema.tcc.TccExecutor;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
@@ -26,14 +26,9 @@ public final class TransactionFactory {
     private static TransactionDataProvider dataProvider;
 
     /**
-     * 监听器
-     */
-    private static BedtListener listener;
-
-    /**
      * 线程池服务
-     * 场景1 事务提交后默认异步执行事务内所有事件.
-     * 场景2 间隔事件扫描未完成事务并事件执行.
+     * 场景1 异步执行事件.
+     * 场景2 事件间隔扫描.
      */
     private static ScheduledExecutorService executorService;
 
@@ -45,10 +40,10 @@ public final class TransactionFactory {
     /**
      * 扫描器每次执行间隔时间, 单位秒
      */
-    private static int SCANNER_DELAY = 10;
+    private static int SCANNER_DELAY = 15;
 
     /**
-     * 扫描重试最大次数
+     * 重试最大次数
      */
     private static int MAX_RETRY_COUNT = 10;
 
@@ -59,18 +54,10 @@ public final class TransactionFactory {
      */
     public static void init (
         TransactionDataProvider dataProvider,
-        BedtListener listener,
-        ScheduledExecutorService executorService,
-        int scannerInitialDelay,
-        int scannerDelay,
-        int maxRetryCount
+        ScheduledExecutorService executorService
     ){
         TransactionFactory.dataProvider = dataProvider;
-        TransactionFactory.listener = listener;
         TransactionFactory.executorService = executorService;
-        TransactionFactory.SCANNER_INITIAL_DELAY = scannerInitialDelay;
-        TransactionFactory.SCANNER_DELAY = scannerDelay;
-        TransactionFactory.MAX_RETRY_COUNT = maxRetryCount;
 
         // scannerInitialDelay秒后开始, 每间隔scannerDelay秒执行一次事务扫描器
         executorService.scheduleWithFixedDelay(
@@ -84,49 +71,60 @@ public final class TransactionFactory {
         TransactionFactory.initFlag = true;
     }
 
+
     /**
      * 创建最大努力型分布式事务执行器
      *
-     * @param remark 信息
      * @return 执行器
      */
-    public static BedtExecutor createBedtExecutor(String remark){
+    public static BedtExecutor createBedtExecutor(){
         // 检测是否已初始化
         assertInit();
 
-        TransactionObject transaction = new TransactionObject()
-            .setUuid(UUID.randomUUID().toString().replace("-", "").toLowerCase())
-            .setTransactionStatus(TransactionStatusEnum.START.getCode())
-            .setRemark(remark)
-            .setErrorInfo("");
-
         return new BedtExecutor()
             .setDataProvider(dataProvider)
-            .setListener(listener)
-            .setExecutorService(executorService)
-            .setMaxRetryCount(MAX_RETRY_COUNT)
-            .setEventContainer(new ArrayList<>())
-            .setTransaction(transaction);
+            .setExecutorService(executorService);
     }
 
     /**
-     * 创建事务执行器
+     * 创建补偿型事务执行器
      *
-     * @param transaction 事务对象
-     * @param eventList 事件集合
      * @return 执行器
      */
-    public static BedtExecutor createBedtExecutor(TransactionObject transaction, List<TransactionEventObject> eventList){
+    public static CtpExecutor createCtpExecutor (){
         // 检测是否已初始化
         assertInit();
 
-        return new BedtExecutor()
+        return new CtpExecutor()
             .setDataProvider(dataProvider)
-            .setListener(listener)
-            .setExecutorService(executorService)
-            .setMaxRetryCount(MAX_RETRY_COUNT)
-            .setEventContainer(eventList)
-            .setTransaction(transaction);
+            .setExecutorService(executorService);
+    }
+
+    /**
+     * 创建tcc事务执行器
+     *
+     * @return 执行器
+     */
+    public static TccExecutor createTccExecutor (){
+        // 检测是否已初始化
+        assertInit();
+
+        return new TccExecutor()
+            .setDataProvider(dataProvider)
+            .setExecutorService(executorService);
+    }
+
+    /**
+     * 创建幂等处理执行器
+     *
+     * @return 执行器
+     */
+    public static IdempotentExecutor createIdempotentExecutor (){
+        // 检测是否已初始化
+        assertInit();
+
+        return new IdempotentExecutor()
+            .setDataProvider(dataProvider);
     }
 
     /**

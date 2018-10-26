@@ -12,31 +12,84 @@ import lombok.Getter;
 public enum TransactionStatusEnum {
 
     /**
-     * 错误的状态值,不存在的状态
+     * 错误的枚举值,不存在的枚举
      */
-    NOT_EXIST ("NOT_EXIST", "错误的状态值,不存在的状态"),
+    NOT_EXIST ("NOT_EXIST", "错误的枚举值,不存在的枚举"),
+
 
     /**
-     * 启动事务
+     * 最大努力型事务模式-执行中
      */
-    START("START", "启动事务"),
+    BEDT_EXECUTING ("BEDT_EXECUTING", "最大努力型事务模式-执行中"),
+    /**
+     * 最大努力型事务模式-执行完成
+     */
+    BEDT_FINISH ("BEDT_FINISH", "最大努力型事务模式-执行完成"),
+    /**
+     * 最大努力型事务模式-执行最终异常
+     */
+    BEDT_ERROR ("BEDT_ERROR", "最大努力型事务模式-执行最终异常"),
+
 
     /**
-     * 提交事务
+     * 事务补偿模式-初始化
      */
-    COMMIT("COMMIT", "提交事务"),
+    CTP_INIT ("CTP_INIT", "事务补偿模式-初始化"),
+    /**
+     * 事务补偿模式-执行完成
+     */
+    CTP_FINISH ("CTP_FINISH", "事务补偿模式-执行完成"),
+    /**
+     * 事务补偿模式-执行异常
+     */
+    CTP_ERROR ("CTP_ERROR", "事务补偿模式-执行异常"),
+    /**
+     * 事务补偿模式-补偿中
+     */
+    CTP_COMPENSATING ("CTP_COMPENSATING", "事务补偿模式-补偿中"),
+    /**
+     * 事务补偿模式-补偿完成
+     */
+    CTP_COMPENSATE_FINISH ("CTP_COMPENSATE_FINISH", "事务补偿模式-补偿完成"),
+    /**
+     * 事务补偿模式-补偿最终异常
+     */
+    CTP_COMPENSATE_ERROR ("CTP_COMPENSATE_ERROR", "事务补偿模式-补偿最终异常"),
+
 
     /**
-     * 事务完成
+     * TCC事务模式-尝试中
      */
-    FINISH("FINISH", "事务完成"),
-
+    TCC_TRYING ("TCC_TRYING", "TCC事务模式-尝试中"),
     /**
-     * 事务最终执行失败,需人工介入
+     * TCC事务模式-尝试异常
      */
-    ERROR("ERROR", "事务最终执行失败,需人工介入"),
+    TCC_TRY_ERROR ("TCC_TRY_ERROR", " TCC事务模式-尝试异常"),
+    /**
+     * TCC事务模式-提交中
+     */
+    TCC_CONFIRMING ("TCC_CONFIRMING", "TCC事务模式-提交中"),
+    /**
+     * TCC事务模式-提交完成
+     */
+    TCC_CONFIRM_FINISH ("TCC_CONFIRM_FINISH", "TCC事务模式-提交完成"),
+    /**
+     * TCC事务模式-提交最终异常
+     */
+    TCC_CONFIRM_ERROR ("TCC_CONFIRM_ERROR", "TCC事务模式-提交最终异常"),
+    /**
+     * TCC事务模式-取消中
+     */
+    TCC_CANCELING ("TCC_CANCELING", "TCC事务模式-取消中"),
+    /**
+     * TCC事务模式-取消完成
+     */
+    TCC_CANCEL_FINISH ("TCC_INIT", "TCC事务模式-取消完成"),
+    /**
+     * TCC事务模式-取消最终异常
+     */
+    TCC_CANCEL_ERROR ("TCC_INIT", "TCC事务模式-取消最终异常"),
 
-    // ROLLBACK("COMMIT", "回滚事务"),
     ;
 
     private final String code;

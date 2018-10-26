@@ -1,5 +1,8 @@
 package com.darren.cloud.common.transaction;
 
+import com.darren.cloud.common.transaction.schema.bedt.BaseBedtEvent;
+import com.darren.cloud.common.transaction.schema.ctp.BaseCtpEvent;
+import com.darren.cloud.common.transaction.schema.tcc.BaseTccEvent;
 import com.darren.cloud.common.utils.JsonUtils;
 import java.text.MessageFormat;
 import java.util.HashMap;
@@ -16,40 +19,76 @@ public final class TransactionEventManager {
     /**
      * 事件class对象容器 map《事件类名, 事件class对象》
      */
-    private final static Map<String, Class<? extends BaseTransactionEvent>> eventClassMap = new HashMap<>();
+    private final static Map<String, Class<? extends TransactionEvent>> EVENT_CLASS_MAP = new HashMap<>();
 
     /**
      * 注册事件
      *
      * @param clazz 事件class对象
      */
-    public synchronized static void registerEvent (Class<? extends BaseTransactionEvent> clazz){
+    public synchronized static void registerEvent (Class<? extends TransactionEvent> clazz){
         String simpleName = clazz.getSimpleName();
-        if (eventClassMap.containsKey(simpleName)){
+        if (EVENT_CLASS_MAP.containsKey(simpleName)){
             throw new RuntimeException(MessageFormat.format(
-                "register transaction event register error, event[{0}] already exist, all events：{1}",
-                simpleName, eventClassMap.keySet()));
+                "TransactionEventManager register error, event[{0}] already exist, all events：{1}",
+                simpleName, EVENT_CLASS_MAP.keySet()));
         }
 
-        eventClassMap.put(simpleName, clazz);
+        EVENT_CLASS_MAP.put(simpleName, clazz);
     }
 
     /**
-     * 创建事件
+     * 创建最大努力型事件
      *
-     * @param event 事件对象
+     * @param model 数据
      * @return 事件
      */
-    public static BaseTransactionEvent createEvent (TransactionEventObject event){
-        String simpleName = event.getEventType();
-        Class<? extends BaseTransactionEvent> clazz = eventClassMap.get(event.getEventType());
+    public static BaseBedtEvent createBedtEvent (TransactionEventModel model){
+        String simpleName = model.getEventType();
+        Class<? extends TransactionEvent> clazz = EVENT_CLASS_MAP.get(simpleName);
         if (clazz == null){
             throw new RuntimeException(MessageFormat.format(
-                "register transaction event create error, event[{0}] not exist, all events：{1}",
-                simpleName, eventClassMap.keySet()));
+                "TransactionEventManager createBedtEvent error, event[{0}] not exist, all events：{1}",
+                simpleName, EVENT_CLASS_MAP.keySet()));
         }
 
-        return JsonUtils.jsonToType(event.getEventJson(), clazz);
+        return JsonUtils.jsonToType(model.getEventJson(), (Class<BaseBedtEvent>) clazz);
+    }
+
+    /**
+     * 创建补偿型事件
+     *
+     * @param model 数据
+     * @return 事件
+     */
+    public static BaseCtpEvent createCtpEvent (TransactionEventModel model){
+        String simpleName = model.getEventType();
+        Class<? extends TransactionEvent> clazz = EVENT_CLASS_MAP.get(simpleName);
+        if (clazz == null){
+            throw new RuntimeException(MessageFormat.format(
+                "TransactionEventManager createCtpEvent error, event[{0}] not exist, all events：{1}",
+                simpleName, EVENT_CLASS_MAP.keySet()));
+        }
+
+        return JsonUtils.jsonToType(model.getEventJson(), (Class<BaseCtpEvent>) clazz);
+    }
+
+    /**
+     * 创建tcc事件
+     *
+     * @param model 数据
+     * @return 事件
+     */
+    public static BaseTccEvent createTccEvent (TransactionEventModel model){
+        String simpleName = model.getEventType();
+        Class<? extends TransactionEvent> clazz = EVENT_CLASS_MAP.get(simpleName);
+        if (clazz == null){
+            throw new RuntimeException(MessageFormat.format(
+                "TransactionEventManager createTccEvent error, event[{0}] not exist, all events：{1}",
+                simpleName, EVENT_CLASS_MAP.keySet()));
+        }
+
+        return JsonUtils.jsonToType(model.getEventJson(), (Class<BaseTccEvent>) clazz);
     }
 
 }
